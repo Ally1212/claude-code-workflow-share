@@ -6,33 +6,33 @@
     <title>掌握副驾驶 | Claude Code 工作流分享</title>
     <meta
       name="description"
-      content="把这半年多使用 Claude Code 的核心经验，整理成一个极简、可落地、可复用的开发工作流。"
+      content="把半年多使用 Claude Code 的经验，整理成一套真正能落地的工作流。"
     />
-    <meta name="theme-color" content="#f4f1ea" />
+    <meta name="theme-color" content="#f5f1e8" />
     <meta property="og:title" content="掌握副驾驶" />
     <meta
       property="og:description"
-      content="一个关于 Claude Code、技能、记忆、沉淀与持续优化的工作流分享。"
+      content="不是插件越多越强，而是让 Claude Code 越来越像你。"
     />
     <meta property="og:type" content="website" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Cormorant+Garamond:wght@500;600;700&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Sora:wght@400;600;700;800&amp;display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg: #f4f1ea;
-        --bg-soft: rgba(255, 255, 255, 0.58);
-        --surface: rgba(255, 255, 255, 0.68);
-        --line: rgba(25, 27, 33, 0.12);
-        --text: #111111;
-        --muted: #626262;
-        --accent: #0f5b52;
-        --accent-soft: rgba(15, 91, 82, 0.1);
-        --shadow: 0 22px 60px rgba(31, 32, 36, 0.08);
-        --max: 1180px;
+        --bg: #f5f1e8;
+        --bg-soft: #fbf8f2;
+        --ink: #101010;
+        --muted: #64615d;
+        --line: rgba(16, 16, 16, 0.12);
+        --line-strong: rgba(16, 16, 16, 0.22);
+        --panel: rgba(255, 255, 255, 0.52);
+        --accent: #111111;
+        --accent-soft: rgba(17, 17, 17, 0.06);
+        --max: 1200px;
       }
 
       * {
@@ -45,13 +45,12 @@
 
       body {
         margin: 0;
-        font-family: "Manrope", sans-serif;
-        color: var(--text);
+        font-family: "Plus Jakarta Sans", sans-serif;
+        color: var(--ink);
         background:
-          radial-gradient(circle at top left, rgba(255, 255, 255, 0.92), transparent 32%),
-          radial-gradient(circle at 85% 15%, rgba(15, 91, 82, 0.12), transparent 24%),
-          radial-gradient(circle at bottom right, rgba(26, 26, 26, 0.08), transparent 28%),
-          linear-gradient(180deg, #f7f4ee 0%, #f1ede4 100%);
+          radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.92), transparent 24%),
+          radial-gradient(circle at 100% 16%, rgba(0, 0, 0, 0.05), transparent 20%),
+          linear-gradient(180deg, #f7f4ed 0%, #f3efe6 100%);
       }
 
       body::before {
@@ -59,12 +58,12 @@
         position: fixed;
         inset: 0;
         pointer-events: none;
-        opacity: 0.24;
+        opacity: 0.08;
         background-image:
-          linear-gradient(rgba(17, 17, 17, 0.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(17, 17, 17, 0.03) 1px, transparent 1px);
-        background-size: 44px 44px;
-        mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
+          linear-gradient(rgba(0, 0, 0, 0.28) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.28) 1px, transparent 1px);
+        background-size: 52px 52px;
+        mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
       }
 
       a {
@@ -72,120 +71,105 @@
         text-decoration: none;
       }
 
-      .page {
+      .site {
         width: min(calc(100% - 40px), var(--max));
         margin: 0 auto;
-        padding: 28px 0 72px;
       }
 
       .topbar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 20px;
-        padding: 8px 0 28px;
+        gap: 18px;
+        padding: 26px 0 20px;
       }
 
-      .brand {
-        font-size: 0.88rem;
-        font-weight: 800;
-        letter-spacing: 0.24em;
+      .brand,
+      .eyebrow,
+      .section-label,
+      .chapter-index,
+      .stat-label,
+      .tool-kicker,
+      .footer-mark {
+        font-family: "IBM Plex Mono", monospace;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
       }
 
-      .nav {
+      .brand {
+        font-size: 0.78rem;
+      }
+
+      .topnav {
         display: flex;
         gap: 18px;
         flex-wrap: wrap;
         justify-content: flex-end;
       }
 
-      .nav a {
-        font-size: 0.92rem;
+      .topnav a {
         color: var(--muted);
+        font-size: 0.9rem;
       }
 
       .hero {
-        min-height: 78vh;
-        display: grid;
-        align-items: end;
-        padding: 44px 0 36px;
-      }
-
-      .hero-shell {
-        position: relative;
-        border: 1px solid var(--line);
-        border-radius: 34px;
-        overflow: hidden;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.56));
-        box-shadow: var(--shadow);
-      }
-
-      .hero-shell::after {
-        content: "";
-        position: absolute;
-        inset: auto -10% -25% auto;
-        width: 360px;
-        height: 360px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(15, 91, 82, 0.14), transparent 62%);
+        padding: 26px 0 44px;
+        border-top: 1px solid var(--line);
       }
 
       .hero-grid {
         display: grid;
-        grid-template-columns: 1.4fr 0.8fr;
-        gap: 28px;
-        padding: 58px;
+        grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+        gap: 42px;
+        align-items: end;
       }
 
       .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 14px;
+        display: inline-block;
+        padding: 9px 12px;
+        border: 1px solid var(--line);
         border-radius: 999px;
-        background: var(--accent-soft);
-        font-size: 0.82rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--accent);
+        font-size: 0.72rem;
+        background: rgba(255, 255, 255, 0.44);
       }
 
-      .hero h1 {
-        margin: 22px 0 18px;
-        max-width: 10ch;
-        font-family: "Cormorant Garamond", serif;
-        font-size: clamp(4rem, 9vw, 8.6rem);
-        line-height: 0.92;
-        font-weight: 600;
-        letter-spacing: -0.05em;
+      .hero-title {
+        margin: 22px 0 16px;
+        font-family: "Sora", sans-serif;
+        font-size: clamp(4.2rem, 11vw, 9.2rem);
+        line-height: 0.9;
+        font-weight: 800;
+        letter-spacing: -0.07em;
       }
 
-      .hero p {
-        max-width: 640px;
+      .hero-title span {
+        display: block;
+      }
+
+      .hero-copy {
+        max-width: 680px;
         margin: 0;
-        font-size: 1.08rem;
-        line-height: 1.9;
         color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.95;
       }
 
       .hero-actions {
         display: flex;
         gap: 14px;
         flex-wrap: wrap;
-        margin-top: 30px;
+        margin-top: 28px;
       }
 
       .button {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 14px 18px;
+        min-height: 48px;
+        padding: 0 18px;
         border-radius: 999px;
-        border: 1px solid var(--line);
-        font-weight: 700;
-        transition: transform 220ms ease, background-color 220ms ease;
+        border: 1px solid var(--line-strong);
+        transition: transform 220ms ease, background-color 220ms ease, color 220ms ease;
       }
 
       .button:hover {
@@ -198,292 +182,284 @@
       }
 
       .button.secondary {
-        background: rgba(255, 255, 255, 0.66);
+        background: rgba(255, 255, 255, 0.5);
       }
 
-      .hero-quote {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 28px;
-        border-radius: 28px;
-        border: 1px solid var(--line);
-        background: rgba(17, 17, 17, 0.96);
-        color: #f5f2ec;
+      .hero-note {
+        padding: 28px 0 0;
+        color: var(--muted);
       }
 
-      .quote-mark {
-        font-family: "Cormorant Garamond", serif;
-        font-size: 5rem;
-        line-height: 1;
+      .hero-note strong {
+        display: block;
+        font-family: "Sora", sans-serif;
+        font-size: 1.4rem;
+        line-height: 1.35;
+        color: var(--ink);
       }
 
-      .hero-quote p {
-        margin: 0;
-        color: rgba(245, 242, 236, 0.82);
-        font-size: 1.04rem;
+      .hero-note p {
+        margin: 12px 0 0;
+        line-height: 1.9;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+        padding: 32px 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stat-label {
+        display: block;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .stat strong {
+        display: block;
+        margin-top: 14px;
+        font-family: "Sora", sans-serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+      }
+
+      .stat p {
+        max-width: 240px;
+        margin: 14px 0 0;
+        color: var(--muted);
         line-height: 1.8;
       }
 
-      .quote-caption {
-        padding-top: 22px;
-        font-size: 0.9rem;
-        color: rgba(245, 242, 236, 0.58);
+      .manifesto {
+        margin: 26px 0 0;
+        padding: 56px;
+        border-radius: 34px;
+        background:
+          radial-gradient(circle at top right, rgba(255, 255, 255, 0.08), transparent 28%),
+          linear-gradient(180deg, #121212 0%, #0a0a0a 100%);
+        color: #f5f1e8;
+      }
+
+      .manifesto p {
+        margin: 0;
+      }
+
+      .manifesto .section-label {
+        color: rgba(245, 241, 232, 0.62);
+        font-size: 0.74rem;
+      }
+
+      .manifesto h2 {
+        max-width: 12ch;
+        margin: 18px 0;
+        font-family: "Sora", sans-serif;
+        font-size: clamp(2.8rem, 6vw, 5.8rem);
+        line-height: 0.96;
+        letter-spacing: -0.07em;
+      }
+
+      .manifesto-copy {
+        max-width: 640px;
+        color: rgba(245, 241, 232, 0.76);
+        line-height: 1.9;
       }
 
       section {
-        padding: 84px 0 0;
+        padding: 96px 0 0;
       }
 
       .section-head {
         display: grid;
-        grid-template-columns: 160px 1fr;
-        gap: 20px;
+        grid-template-columns: 180px minmax(0, 1fr);
+        gap: 26px;
         align-items: start;
-        margin-bottom: 26px;
       }
 
-      .section-index {
-        font-size: 0.82rem;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
+      .section-label {
         color: var(--muted);
-        padding-top: 14px;
+        font-size: 0.72rem;
+        padding-top: 10px;
       }
 
-      .section-head h2 {
+      .section-title {
         margin: 0;
-        font-family: "Cormorant Garamond", serif;
-        font-size: clamp(2.5rem, 4vw, 4.5rem);
+        max-width: 14ch;
+        font-family: "Sora", sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4.8rem);
         line-height: 0.96;
-        font-weight: 600;
-        letter-spacing: -0.04em;
+        letter-spacing: -0.06em;
       }
 
-      .section-head p {
-        max-width: 760px;
+      .section-copy {
+        max-width: 720px;
         margin: 14px 0 0;
         color: var(--muted);
-        font-size: 1rem;
-        line-height: 1.9;
+        line-height: 1.95;
       }
 
-      .metrics {
+      .chapters {
+        margin-top: 30px;
+        border-top: 1px solid var(--line);
+      }
+
+      .chapter {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 16px;
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 30px;
+        padding: 34px 0;
+        border-bottom: 1px solid var(--line);
       }
 
-      .metric,
-      .card,
-      .timeline-item,
-      .stack-panel,
-      .closing-card {
-        border: 1px solid var(--line);
-        border-radius: 28px;
-        background: var(--surface);
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(14px);
-      }
-
-      .metric {
-        padding: 28px;
-      }
-
-      .metric span {
-        display: block;
-        font-size: 0.82rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .metric strong {
-        display: block;
-        margin-top: 16px;
-        font-family: "Cormorant Garamond", serif;
-        font-size: clamp(2.2rem, 5vw, 3.6rem);
-        line-height: 0.95;
-        font-weight: 600;
-      }
-
-      .metric p {
-        margin: 16px 0 0;
-        color: var(--muted);
-        line-height: 1.8;
-      }
-
-      .cards {
+      .chapter-side {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-      }
-
-      .card {
-        padding: 28px;
-      }
-
-      .card-label {
-        display: inline-flex;
-        padding: 6px 11px;
-        border-radius: 999px;
-        background: rgba(17, 17, 17, 0.06);
-        font-size: 0.78rem;
-        font-weight: 800;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .card h3 {
-        margin: 16px 0 10px;
-        font-size: 1.28rem;
-        line-height: 1.3;
-      }
-
-      .card p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.9;
-      }
-
-      .card ul {
-        margin: 18px 0 0;
-        padding: 0;
-        list-style: none;
-        display: grid;
+        align-content: start;
         gap: 12px;
       }
 
-      .card li {
-        padding-top: 12px;
-        border-top: 1px solid rgba(17, 17, 17, 0.08);
-        line-height: 1.8;
-      }
-
-      .timeline {
-        display: grid;
-        gap: 14px;
-      }
-
-      .timeline-item {
-        display: grid;
-        grid-template-columns: 140px 1fr;
-        gap: 22px;
-        padding: 24px 28px;
-      }
-
-      .timeline-item strong {
-        font-size: 0.88rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
+      .chapter-index {
         color: var(--muted);
+        font-size: 0.72rem;
       }
 
-      .timeline-item h3 {
-        margin: 0 0 10px;
-        font-size: 1.12rem;
+      .chapter-mark {
+        font-family: "Sora", sans-serif;
+        font-size: clamp(2.8rem, 5vw, 4.8rem);
+        line-height: 0.9;
+        letter-spacing: -0.08em;
       }
 
-      .timeline-item p {
+      .chapter h3 {
         margin: 0;
+        font-family: "Sora", sans-serif;
+        font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+        line-height: 1.05;
+        letter-spacing: -0.05em;
+      }
+
+      .chapter p {
+        max-width: 720px;
+        margin: 14px 0 0;
         color: var(--muted);
+        line-height: 1.95;
+      }
+
+      .chapter-points {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .chapter-points div {
+        padding-left: 18px;
+        position: relative;
         line-height: 1.85;
       }
 
-      .stack {
+      .chapter-points div::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.88em;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #111111;
+      }
+
+      .chapter-points strong {
+        color: var(--ink);
+      }
+
+      .tools {
         display: grid;
-        grid-template-columns: 1.1fr 1fr;
-        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 32px;
+        margin-top: 34px;
       }
 
-      .stack-panel {
-        padding: 28px;
+      .tool-panel {
+        padding-top: 10px;
       }
 
-      .stack-panel h3 {
-        margin: 0 0 16px;
-        font-size: 1.22rem;
-      }
-
-      .pill-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 12px;
-        border-radius: 999px;
-        background: rgba(17, 17, 17, 0.06);
-        font-size: 0.92rem;
-        font-weight: 700;
-      }
-
-      .pill em {
-        font-style: normal;
+      .tool-kicker {
         color: var(--muted);
-        font-weight: 600;
+        font-size: 0.72rem;
+      }
+
+      .tool-panel h3 {
+        margin: 12px 0 0;
+        font-family: "Sora", sans-serif;
+        font-size: 1.8rem;
+        line-height: 1.08;
+        letter-spacing: -0.05em;
+      }
+
+      .tool-list {
+        margin-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      .tool-item {
+        display: grid;
+        grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+        gap: 16px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .tool-item strong {
+        font-size: 0.96rem;
+      }
+
+      .tool-item span {
+        color: var(--muted);
+        line-height: 1.8;
       }
 
       .closing {
-        padding-bottom: 28px;
+        padding: 120px 0 64px;
       }
 
-      .closing-card {
-        padding: 36px;
-        display: grid;
-        grid-template-columns: 1.3fr 0.9fr;
-        gap: 22px;
-        overflow: hidden;
+      .closing-shell {
+        padding-top: 30px;
+        border-top: 1px solid var(--line);
+        text-align: center;
       }
 
-      .closing-card h2 {
-        margin: 0 0 14px;
+      .closing-shell h2 {
         max-width: 11ch;
+        margin: 0 auto;
+        font-family: "Sora", sans-serif;
+        font-size: clamp(2.8rem, 6vw, 6rem);
+        line-height: 0.94;
+        letter-spacing: -0.08em;
       }
 
-      .closing-card p {
-        margin: 0;
-        max-width: 640px;
+      .closing-shell p {
+        max-width: 700px;
+        margin: 18px auto 0;
         color: var(--muted);
-        line-height: 1.9;
+        line-height: 1.95;
       }
 
-      .closing-side {
-        padding-left: 22px;
-        border-left: 1px solid rgba(17, 17, 17, 0.1);
-      }
-
-      .closing-side strong {
-        display: block;
-        font-size: 0.88rem;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--muted);
-        margin-bottom: 16px;
-      }
-
-      .closing-side p + p {
-        margin-top: 14px;
-      }
-
-      footer {
-        padding: 28px 0 8px;
+      .footer {
         display: flex;
         justify-content: space-between;
-        gap: 20px;
-        border-top: 1px solid rgba(17, 17, 17, 0.08);
+        gap: 18px;
+        margin-top: 42px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
         color: var(--muted);
         font-size: 0.92rem;
       }
 
       .reveal {
         opacity: 0;
-        transform: translateY(28px);
+        transform: translateY(24px);
         transition: opacity 700ms ease, transform 700ms ease;
       }
 
@@ -492,223 +468,211 @@
         transform: translateY(0);
       }
 
-      @media (max-width: 980px) {
+      @media (max-width: 960px) {
         .hero-grid,
-        .stack,
-        .closing-card {
-          grid-template-columns: 1fr;
-        }
-
         .section-head,
-        .timeline-item {
+        .chapter,
+        .tools,
+        .tool-item {
           grid-template-columns: 1fr;
         }
 
-        .closing-side {
-          padding-left: 0;
-          border-left: 0;
-          border-top: 1px solid rgba(17, 17, 17, 0.1);
-          padding-top: 22px;
+        .hero-note {
+          padding-top: 0;
+        }
+
+        .manifesto {
+          padding: 34px 28px;
         }
       }
 
-      @media (max-width: 768px) {
-        .page {
+      @media (max-width: 760px) {
+        .site {
           width: min(calc(100% - 28px), var(--max));
-          padding-top: 18px;
+        }
+
+        .topbar,
+        .footer {
+          flex-direction: column;
+          align-items: flex-start;
         }
 
         .topbar {
-          flex-direction: column;
-          align-items: flex-start;
-          padding-bottom: 12px;
+          padding-top: 18px;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+          gap: 18px;
         }
 
         .hero {
-          min-height: auto;
-          padding-top: 20px;
+          padding-top: 12px;
         }
 
-        .hero-grid,
-        .hero-quote,
-        .metric,
-        .card,
-        .stack-panel,
-        .closing-card,
-        .timeline-item {
-          padding: 22px;
-        }
-
-        .metrics,
-        .cards {
-          grid-template-columns: 1fr;
-        }
-
-        .hero h1 {
-          max-width: none;
+        .section-head,
+        .chapter {
+          gap: 18px;
         }
 
         section {
-          padding-top: 62px;
+          padding-top: 72px;
         }
       }
     </style>
   </head>
   <body>
-    <main class="page">
+    <main class="site">
       <header class="topbar">
-        <div class="brand">Claude Code Workflow</div>
-        <nav class="nav">
-          <a href="#framework">框架</a>
+        <div class="brand">Claude Code Workflow / 2026</div>
+        <nav class="topnav">
+          <a href="#method">方法</a>
           <a href="#workflow">流程</a>
-          <a href="#stack">技能栈</a>
+          <a href="#stack">技能</a>
           <a href="#closing">结语</a>
         </nav>
       </header>
 
       <section class="hero">
-        <div class="hero-shell reveal">
-          <div class="hero-grid">
+        <div class="hero-grid">
+          <div class="reveal">
+            <div class="eyebrow">半年实战分享</div>
+            <h1 class="hero-title">
+              <span>掌握</span>
+              <span>副驾驶</span>
+            </h1>
+            <p class="hero-copy">
+              这不是一篇“装很多插件就会变强”的经验帖。真正有用的，是把 Claude Code
+              调成一套系统：启动更快，规则更准，技能更顺手，经验能沉淀，流程能复用。
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#method">看核心方法</a>
+              <a class="button secondary" href="#stack">看技能配置</a>
+            </div>
+          </div>
+
+          <aside class="hero-note reveal">
+            <strong>不是模型越强越够用，而是你的系统有没有跟上。</strong>
+            <p>
+              当权限、规则、技能、记忆、文档、hooks 开始协同，Claude Code
+              才会从“会回答”变成“会协作”。
+            </p>
+          </aside>
+        </div>
+
+        <div class="stats reveal">
+          <article class="stat">
+            <span class="stat-label">Layer 01</span>
+            <strong>权限</strong>
+            <p>让开始做事的成本足够低，思路不要被确认框切碎。</p>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Layer 02</span>
+            <strong>规则</strong>
+            <p>把跨项目、长期稳定的偏好写进全局配置，不要反复提醒。</p>
+          </article>
+          <article class="stat">
+            <span class="stat-label">Layer 03</span>
+            <strong>沉淀</strong>
+            <p>把错误、流程和方法留下来，让下一次协作从更高起点开始。</p>
+          </article>
+        </div>
+
+        <div class="manifesto reveal">
+          <p class="section-label">核心判断</p>
+          <h2>不是插件越多越强，而是让 Claude Code 越来越像你。</h2>
+          <p class="manifesto-copy">
+            真正的差距，不在于你有没有追到最新插件，而在于你有没有把自己的工作习惯、判断标准和复盘结果持续写进系统。
+            你在训练的，不只是一个工具，而是一个越来越懂你的开发伙伴。
+          </p>
+        </div>
+      </section>
+
+      <section id="method">
+        <div class="section-head reveal">
+          <div class="section-label">Method / 方法</div>
+          <div>
+            <h2 class="section-title">先把底座搭好，再谈效率。</h2>
+            <p class="section-copy">
+              这套工作流最重要的，不是花哨，而是顺序。先降低摩擦，再统一规则，再建立沉淀机制。
+              顺序错了，后面加再多插件也只是更复杂。
+            </p>
+          </div>
+        </div>
+
+        <div class="chapters">
+          <article class="chapter reveal">
+            <div class="chapter-side">
+              <div class="chapter-index">Chapter 01</div>
+              <div class="chapter-mark">快</div>
+            </div>
             <div>
-              <div class="eyebrow">半年实战 · 真诚分享</div>
-              <h1>掌握副驾驶。</h1>
+              <h3>先把启动速度做到足够快</h3>
               <p>
-                这不是一篇“插件越多越强”的清单，而是一套把
-                Claude Code 调成真正生产力系统的思路：先降低摩擦，再建立规则，再持续沉淀，
-                最后让你的 AI 副驾驶越来越像你。
+                我会先做一个像 `yolo` 这样的自定义命令，核心不是“激进”，而是避免每次进入 Claude
+                Code 都被重复的权限确认打断。只要你的边界是清楚的，降低交互摩擦本身就是生产力。
               </p>
-              <div class="hero-actions">
-                <a class="button primary" href="#framework">看核心框架</a>
-                <a class="button secondary" href="#stack">看我的技能栈</a>
+              <div class="chapter-points">
+                <div><strong>目标：</strong>把“想到要做”到“开始做”的距离缩短。</div>
+                <div><strong>结果：</strong>思考链路更完整，连续性更强。</div>
               </div>
             </div>
-
-            <aside class="hero-quote">
-              <div class="quote-mark">“</div>
-              <p>
-                理论上你可以学会任何东西。前提不是模型够强，而是你有没有把权限、工作流、技能、记忆和经验库真正串起来。
-              </p>
-              <div class="quote-caption">从“会用”到“会调”，再到“会沉淀”。</div>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      <section id="framework">
-        <div class="section-head reveal">
-          <div class="section-index">01 / Framework</div>
-          <div>
-            <h2>先把框架搭对，再谈效率。</h2>
-            <p>
-              这套方法的底层很简单，只有三层：第一层是权限，减少来回确认；第二层是规则，让 Claude
-              Code 记住你的偏好；第三层是沉淀，把每次踩坑、流程、结论都留下来，形成复利。
-            </p>
-          </div>
-        </div>
-
-        <div class="metrics">
-          <article class="metric reveal">
-            <span>Layer 01</span>
-            <strong>权限</strong>
-            <p>
-              自定义一个像 `yolo` 这样的启动命令，本质是先把交互摩擦降到最低，让思路不断线。
-            </p>
           </article>
-          <article class="metric reveal">
-            <span>Layer 02</span>
-            <strong>规则</strong>
-            <p>
-              用全局配置约束语言、调研偏好、回答风格和编码原则，控制模型默认行为，而不是每次重说。
-            </p>
-          </article>
-          <article class="metric reveal">
-            <span>Layer 03</span>
-            <strong>沉淀</strong>
-            <p>
-              把错误、经验、部署流程、学习心得、项目记忆都保存下来，让下一次协作从更高起点开始。
-            </p>
-          </article>
-        </div>
-      </section>
 
-      <section>
-        <div class="section-head reveal">
-          <div class="section-index">02 / Setup</div>
-          <div>
-            <h2>好的开始，是把 Claude Code 调成你的样子。</h2>
-            <p>
-              全局配置不需要复杂，关键是只保留跨项目、长期稳定、你真的会反复用到的规则。越短越好，越准越好，最好控制在一屏能看完的规模。
-            </p>
-          </div>
-        </div>
-
-        <div class="cards">
-          <article class="card reveal">
-            <div class="card-label">Command</div>
-            <h3>先做一个顺手的启动入口</h3>
-            <p>
-              例如 `yolo` 这类命令，目的是一键拉起 Claude Code 并打开你常用的权限范围。不是为了炫技，而是为了让“想做”到“开始做”之间没有阻力。
-            </p>
-          </article>
-          <article class="card reveal">
-            <div class="card-label">CLAUDE.md</div>
-            <h3>把模型长期记住的东西，写进全局配置</h3>
-            <ul>
-              <li>始终中文回答，但联网调研优先英文高质量信息源。</li>
-              <li>只写跨项目规范，项目特定约束放项目自己的 `CLAUDE.md`。</li>
-              <li>保持精简，不让全局记忆被噪音淹没。</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section id="workflow">
-        <div class="section-head reveal">
-          <div class="section-index">03 / Workflow</div>
-          <div>
-            <h2>真正的提升，不来自一次回答，而来自一套循环。</h2>
-            <p>
-              每次开始编码前，先问有没有现成技能；每次出错后，记下这次教训；每次流程跑通后，把它沉淀成文档或记忆。这样 Claude
-              Code 才会从“回答问题”逐步变成“长期协作者”。
-            </p>
-          </div>
-        </div>
-
-        <div class="timeline">
-          <article class="timeline-item reveal">
-            <strong>Before Code</strong>
+          <article class="chapter reveal">
+            <div class="chapter-side">
+              <div class="chapter-index">Chapter 02</div>
+              <div class="chapter-mark">准</div>
+            </div>
             <div>
-              <h3>先找技能，不要重复造轮子</h3>
+              <h3>把全局规则写短，但写准</h3>
               <p>
-                要接入支付，就先用 `/find-skills` 找 RevenueCat 相关技能；要做部署、设计、测试、性能优化，也先查有没有现成工作流。先装配，再开工。
+                `CLAUDE.md` 不应该成为一份冗长说明书。更好的做法是只保留跨项目、长期稳定的偏好：
+                例如始终中文回答、联网调研优先英文高质量信息源、只写通用编码原则、项目特定规则放项目目录。
               </p>
+              <div class="chapter-points">
+                <div><strong>建议：</strong>尽量控制在一屏到两屏内，别让噪音淹没有效约束。</div>
+                <div><strong>原则：</strong>全局只写共性，项目只写个性。</div>
+              </div>
             </div>
           </article>
-          <article class="timeline-item reveal">
-            <strong>After Fix</strong>
+
+          <article class="chapter reveal" id="workflow">
+            <div class="chapter-side">
+              <div class="chapter-index">Chapter 03</div>
+              <div class="chapter-mark">借</div>
+            </div>
             <div>
-              <h3>问题解决后，把经验写回项目记忆</h3>
+              <h3>开始写代码前，先问有没有现成技能</h3>
               <p>
-                出错并不可怕，可怕的是下次继续犯。把这次错误原因、修复方式、避免建议记录进项目记忆，让模型下一轮更少走弯路。
+                每次要做新事情，我先问的不是“怎么写”，而是“现在有没有合适的 skill”。
+                比如要接 RevenueCat，就先用 `/find-skills`
+                找相关能力；设计、测试、支付、部署、性能优化也一样。先借力，再开工。
               </p>
+              <div class="chapter-points">
+                <div><strong>元技能：</strong>`find-skills` 负责找，`create-skill` 负责补空白。</div>
+                <div><strong>好处：</strong>减少重复造轮子，让 Claude Code 更快进入正确语境。</div>
+              </div>
             </div>
           </article>
-          <article class="timeline-item reveal">
-            <strong>After Repeat</strong>
-            <div>
-              <h3>把高频流程沉淀成 `docs`</h3>
-              <p>
-                部署、上线、回滚、环境配置、服务端脚本，只要会重复发生，就写成项目内文档。下一次直接让模型参考文档执行，而不是从头口述。
-              </p>
+
+          <article class="chapter reveal">
+            <div class="chapter-side">
+              <div class="chapter-index">Chapter 04</div>
+              <div class="chapter-mark">存</div>
             </div>
-          </article>
-          <article class="timeline-item reveal">
-            <strong>Knowledge</strong>
             <div>
-              <h3>外部笔记，是你的外挂知识库</h3>
+              <h3>问题解决后，把经验写回系统</h3>
               <p>
-                像 `/biji`、`/learn` 这样的命令，本质上是在把会话里的洞见、开源项目拆解、方法论总结，持续写进 Obsidian 这样的本地知识库。
+                真正能拉开长期差距的，不是单次回答质量，而是问题解决后有没有形成沉淀。
+                我会把踩坑、修复方式和避免建议写入项目记忆；把部署、回滚、环境配置这类会重复发生的流程写进 `docs`；
+                把更抽象的方法论和学习成果写入本地 Obsidian。
               </p>
+              <div class="chapter-points">
+                <div><strong>项目记忆：</strong>降低同类错误再次发生的概率。</div>
+                <div><strong>项目文档：</strong>把高频流程标准化，下次直接让模型照着执行。</div>
+                <div><strong>外部笔记：</strong>把会话里的价值提炼成长期资产。</div>
+              </div>
             </div>
           </article>
         </div>
@@ -716,40 +680,59 @@
 
       <section id="stack">
         <div class="section-head reveal">
-          <div class="section-index">04 / Stack</div>
+          <div class="section-label">Stack / 技能</div>
           <div>
-            <h2>技能不是越多越好，而是越贴合你的工作越好。</h2>
-            <p>
-              我更推荐先装两个“元技能”：一个负责找技能，一个负责造技能。剩下的插件和技能，都围绕你自己的项目结构、技术栈和高频问题来配置。
+            <h2 class="section-title">技能不求多，求顺手，求贴身。</h2>
+            <p class="section-copy">
+              推荐先搭元能力，再按真实高频场景继续扩展。装得再多，如果你不用，它就不是能力，只是库存。
             </p>
           </div>
         </div>
 
-        <div class="stack">
-          <article class="stack-panel reveal">
-            <h3>推荐的元插件与常用插件</h3>
-            <div class="pill-grid">
-              <div class="pill">find-skills <em>找能力</em></div>
-              <div class="pill">skill creator <em>造能力</em></div>
-              <div class="pill">Context7 <em>最新文档</em></div>
-              <div class="pill">claude-mem <em>持久记忆</em></div>
-              <div class="pill">claude-hud <em>状态 HUD</em></div>
-              <div class="pill">pm-toolkit <em>PM 工具集</em></div>
-              <div class="pill">pm-product-discovery <em>产品发现</em></div>
+        <div class="tools">
+          <article class="tool-panel reveal">
+            <div class="tool-kicker">Meta Plugins</div>
+            <h3>先装能帮你继续进化的工具</h3>
+            <div class="tool-list">
+              <div class="tool-item">
+                <strong>find-skills</strong>
+                <span>先找能力，再决定要不要自己写。</span>
+              </div>
+              <div class="tool-item">
+                <strong>create-skill</strong>
+                <span>市面上没有合适能力时，补上你自己的工作流。</span>
+              </div>
+              <div class="tool-item">
+                <strong>Context7</strong>
+                <span>调最新文档时更稳，尤其适合技术接入和 API 变化快的场景。</span>
+              </div>
+              <div class="tool-item">
+                <strong>claude-mem</strong>
+                <span>把长期记忆接进来，让经验开始积累，而不是反复丢失。</span>
+              </div>
             </div>
           </article>
 
-          <article class="stack-panel reveal">
-            <h3>我在用的自定义命令与代表性技能</h3>
-            <div class="pill-grid">
-              <div class="pill">/biji <em>沉淀精华</em></div>
-              <div class="pill">/commit <em>整理并提交</em></div>
-              <div class="pill">/learn <em>拆解开源项目</em></div>
-              <div class="pill">/xcodo <em>自动打开 Xcode</em></div>
-              <div class="pill">revenuecat <em>支付接入</em></div>
-              <div class="pill">swiftui <em>Apple 生态</em></div>
-              <div class="pill">playwright-testing <em>端到端验证</em></div>
-              <div class="pill">stock-analyzer <em>摸鱼也要系统化</em></div>
+          <article class="tool-panel reveal">
+            <div class="tool-kicker">Personal Commands</div>
+            <h3>我常用的自定义命令与技能</h3>
+            <div class="tool-list">
+              <div class="tool-item">
+                <strong>/biji</strong>
+                <span>把当前会话的精华整理成 Obsidian 笔记。</span>
+              </div>
+              <div class="tool-item">
+                <strong>/commit</strong>
+                <span>整理本次变更，生成语义化提交信息并推送。</span>
+              </div>
+              <div class="tool-item">
+                <strong>/learn</strong>
+                <span>拿到一个开源项目后，按意图自动拆解和学习。</span>
+              </div>
+              <div class="tool-item">
+                <strong>/xcodo</strong>
+                <span>直接拉起 Xcode 并做基础构建检查，省掉手动开工程。</span>
+              </div>
             </div>
           </article>
         </div>
@@ -757,80 +740,64 @@
 
       <section>
         <div class="section-head reveal">
-          <div class="section-index">05 / Environment</div>
+          <div class="section-label">Environment / 环境</div>
           <div>
-            <h2>环境也要服务于思考。</h2>
-            <p>
-              一个透明终端、多个分屏、顺手的快捷键、关键节点的 hooks、必要时的 worktree，这些并不是装饰，它们共同决定了你和模型协作时的节奏感。
+            <h2 class="section-title">好的环境，应该让你更专注，而不是更忙。</h2>
+            <p class="section-copy">
+              终端、快捷键、分屏、hooks、worktree，这些都不是重点，重点是它们有没有把你的节奏变顺。
+              适合自己的保留，不适合自己的就删掉。工作流的终点从来不是复杂，而是自然。
             </p>
           </div>
         </div>
 
-        <div class="cards">
-          <article class="card reveal">
-            <div class="card-label">Terminal</div>
-            <h3>让终端像工作台，而不是黑盒</h3>
-            <p>
-              例如使用 Kaku 这类可定制、支持多窗口与透明效果的终端，把多个上下文同时展开，会比频繁切换窗口流畅很多。
-            </p>
-          </article>
-          <article class="card reveal">
-            <div class="card-label">Hooks & Worktrees</div>
-            <h3>复杂任务再上自动化拆分</h3>
-            <p>
-              hooks 适合在关键节点自动触发检查与提示；多 worktree 适合大任务拆分，但是否保留，要看它是不是让你更轻松，而不是更复杂。
-            </p>
+        <div class="chapters">
+          <article class="chapter reveal">
+            <div class="chapter-side">
+              <div class="chapter-index">Environment</div>
+              <div class="chapter-mark">稳</div>
+            </div>
+            <div>
+              <h3>环境只是服务于思考</h3>
+              <p>
+                像 Kaku 这类终端之所以好，不是因为透明，而是因为它能让你更舒服地展开多个上下文。hooks
+                也是一样，只有在它确实能自动做掉重复工作时才值得保留。多 worktree
+                也不是必须项，大任务拆分时它有用，但如果让你更乱，就不要为了“高级”而使用。
+              </p>
+            </div>
           </article>
         </div>
       </section>
 
       <section id="closing" class="closing">
-        <div class="section-head reveal">
-          <div class="section-index">06 / Closing</div>
-          <div>
-            <h2>最终目标，不是更会聊天，而是更会造产品。</h2>
-            <p>
-              模型会越来越强，但真正拉开差距的，是你有没有持续打磨自己的系统。权限、技能、规则、记忆、流程、文档、复盘，这些东西一旦连起来，Claude
-              Code 才会越来越像一个“懂你”的副驾驶。
-            </p>
-          </div>
-        </div>
+        <div class="closing-shell reveal">
+          <h2>使用最强模型，做心里真正想做的产品。</h2>
+          <p>
+            你不是在追一个更会说话的 AI。你是在慢慢打磨一套属于自己的协作系统。
+            当启动足够快、规则足够清晰、技能足够贴身、经验足够可复用，Claude Code
+            才会越来越像一个真正可靠的副驾驶。
+          </p>
 
-        <div class="closing-card reveal">
-          <div>
-            <h2>使用最强模型，做心里真正想做的产品。</h2>
-            <p>
-              这套方法没有神秘感。它只是要求你认真对待自己的工作流，然后不断微调。你不是在适应工具，而是在训练一个越来越懂你的开发伙伴。
-            </p>
-          </div>
-          <div class="closing-side">
-            <strong>一句话总结</strong>
-            <p>先降低启动摩擦。</p>
-            <p>再把常用规则写清楚。</p>
-            <p>最后把经验系统性沉淀下来。</p>
-          </div>
+          <footer class="footer">
+            <div class="footer-mark">Claude Code Workflow Share</div>
+            <div>Handwritten from practice. Refined into a system.</div>
+          </footer>
         </div>
       </section>
-
-      <footer>
-        <div>Handwritten from practice, refined into a page.</div>
-        <div>2026 · Claude Code Workflow Share</div>
-      </footer>
     </main>
 
     <script>
       const observer = new IntersectionObserver(
         (entries) => {
-          entries.forEach((entry) => {
+          for (const entry of entries) {
             if (entry.isIntersecting) {
               entry.target.classList.add("visible");
             }
-          });
+          }
         },
-        { threshold: 0.15 }
+        { threshold: 0.14 }
       );
 
-      document.querySelectorAll(".reveal").forEach((node) => observer.observe(node));
+      document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
     </script>
   </body>
 </html>
